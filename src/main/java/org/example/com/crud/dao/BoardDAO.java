@@ -42,13 +42,19 @@ public class BoardDAO {
     }
 
     // 2. 글 목록 조회 (Read List)
-    public List<BoardVO> getBoardList() {
+    public List<BoardVO> getBoardList(String key, String word) {
         System.out.println("===> JDBC로 getBoardList() 기능 처리");
         List<BoardVO> boardList = new ArrayList<BoardVO>();
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_LIST);
+            String sql = "select * from BOARD order by seq desc";
+
+        if(word!= null && !word.equals("")){
+            sql = "select * from BOARD where "+key+" like '%"+word+"%' order by seq desc";
+        }
+            stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
+
             while (rs.next()) {
                 BoardVO board = new BoardVO();
                 board.setSeq(rs.getInt("seq"));

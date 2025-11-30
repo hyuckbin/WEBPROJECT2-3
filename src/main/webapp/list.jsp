@@ -7,12 +7,28 @@
 <%
     // DB에서 리스트 가져오는 로직
     BoardDAO boardDAO = new BoardDAO();
-    List<BoardVO> list = boardDAO.getBoardList();
+    String key = request.getParameter("key");
+    String word = request.getParameter("word");
+    List<BoardVO> list = boardDAO.getBoardList(key,word);
     request.setAttribute("list", list);
 %>
 
 <div class="container">
     <h2 class="page-title">📋 자유 게시판</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <form action="list.jsp" method="get" class="form-inline">
+                <div class="input-group">
+                    <select name="key" class="form-control" style="max-width: 120px;">
+                        <option value="title">제목</option>
+                        <option value="writer">작성자</option>
+                    </select>
+                    <input type="text" name="word" class="form-control" placeholder="검색어를 입력하세요">
+                    <button type="submit" class="btn btn-outline-primary">검색</button>
+                </div>
+            </form>
+        </div>
 
     <div class="text-right mb-3">
         <a href="write.jsp" class="btn btn-primary">새 글 작성</a>
