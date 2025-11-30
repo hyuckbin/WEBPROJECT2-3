@@ -88,14 +88,24 @@ public class BoardDAO {
         System.out.println("===> JDBC로 updateBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-
-            String sql = "update BOARD set title=? , writer=? , content=? , filename= ? where seq=?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, vo.getTitle());
-            stmt.setString(2, vo.getWriter());
-            stmt.setString(3, vo.getContent());
-            stmt.setString(4, vo.getFilename());
-            stmt.setInt(5, vo.getSeq());
+            String sql = "";
+            // 1. 새 파일이 업로드되었는지 확인
+            if (vo.getFilename() != null && !vo.getFilename().equals("")) {
+                sql = "update BOARD set title=?, writer=?, content=?, filename=? where seq=?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, vo.getTitle());
+                stmt.setString(2, vo.getWriter());
+                stmt.setString(3, vo.getContent());
+                stmt.setString(4, vo.getFilename());
+                stmt.setInt(5, vo.getSeq());
+            } else {
+                sql = "update BOARD set title=?, writer=?, content=? where seq=?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, vo.getTitle());
+                stmt.setString(2, vo.getWriter());
+                stmt.setString(3, vo.getContent());
+                stmt.setInt(4, vo.getSeq());
+            }
 
             return stmt.executeUpdate();
         } catch (Exception e) {
@@ -133,4 +143,20 @@ public class BoardDAO {
         return board;
     }
 
+    // 조회수 증가 (상세보기 시 호출)
+    public void increaseCnt(int seq) {
+        System.out.println("===> JDBC로 increaseCnt() 기능 처리");
+        try {
+            conn = JDBCUtil.getConnection();
+            // 해당 글 번호(seq)의 조회수(cnt)를 기존 값에서 +1 더해서 수정
+            String sql = "UPDATE BOARD SET cnt = cnt + 1 WHERE seq = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.close(stmt, conn);
+        }
+    }
 }

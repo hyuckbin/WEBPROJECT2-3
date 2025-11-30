@@ -12,9 +12,9 @@
 <div class="container">
     <h3 class="text-center mb-4">📝 게시글 수정</h3>
 
-    <form action="edit_ok.jsp" method="post">
+    <form action="edit_ok.jsp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="seq" value="<%=u.getSeq()%>">
-
+        <input type="hidden" name="old_filename" value="<%=u.getFilename()%>">
         <div class="form-group">
             <label for="title">제목</label>
             <input type="text" class="form-control" id="title" name="title" value="<%=u.getTitle()%>" required>
@@ -23,6 +23,16 @@
         <div class="form-group">
             <label for="writer">작성자</label>
             <input type="text" class="form-control" id="writer" name="writer" value="<%=u.getWriter()%>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="photo">사진 첨부</label>
+            <% if(u.getFilename() != null && !u.getFilename().equals("")) { %>
+            <div class="mb-2 text-muted">
+                <small>현재 파일: <%= u.getFilename() %></small>
+            </div>
+            <% } %>
+            <input type="file" class="form-control-file" id="photo" name="photo">
         </div>
 
         <div class="form-group">
