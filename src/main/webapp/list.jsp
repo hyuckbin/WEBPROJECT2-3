@@ -9,7 +9,13 @@
     BoardDAO boardDAO = new BoardDAO();
     String key = request.getParameter("key");
     String word = request.getParameter("word");
-    List<BoardVO> list = boardDAO.getBoardList(key,word);
+    String order = request.getParameter("order");
+
+    if(key == null) key ="title";
+    if(word == null) word= "";
+    if(order == null) order = "seq";
+
+    List<BoardVO> list = boardDAO.getBoardList(key,word,order);
     request.setAttribute("list", list);
 %>
 
@@ -18,20 +24,25 @@
 
     <div class="row mb-3">
         <div class="col-md-8">
-            <form action="list.jsp" method="get" class="form-inline">
-                <div class="input-group">
-                    <select name="key" class="form-control" style="max-width: 120px;">
-                        <option value="title">제목</option>
-                        <option value="writer">작성자</option>
-                    </select>
-                    <input type="text" name="word" class="form-control" placeholder="검색어를 입력하세요">
-                    <button type="submit" class="btn btn-outline-primary">검색</button>
-                </div>
+            <form action="list.jsp" method="get" class="d-flex"> <div class="input-group" style="max-width: 500px;"> <select name="key" class="form-select" style="max-width: 120px;">
+                <option value="title" <%= "title".equals(key) ? "selected" : "" %>>제목</option>
+                <option value="writer" <%= "writer".equals(key) ? "selected" : "" %>>작성자</option>
+            </select>
+                <input type="text" name="word" class="form-control" placeholder="검색어를 입력하세요" value="<%= word %>">
+                <button type="submit" class="btn btn-outline-primary">검색</button>
+            </div>
             </form>
         </div>
 
-    <div class="text-right mb-3">
-        <a href="write.jsp" class="btn btn-primary">새 글 작성</a>
+        <div class="col-md-4 text-end"> <div class="btn-group btn-group-sm me-2" role="group">
+            <a href="list.jsp?key=<%=key%>&word=<%=word%>&order=seq"
+               class="btn <%= "seq".equals(order) ? "btn-secondary" : "btn-outline-secondary" %>">최신순</a>
+
+            <a href="list.jsp?key=<%=key%>&word=<%=word%>&order=cnt"
+               class="btn <%= "cnt".equals(order) ? "btn-secondary" : "btn-outline-secondary" %>">조회수순</a>
+        </div>
+            <a href="write.jsp" class="btn btn-primary btn-sm">새 글 작성</a>
+        </div>
     </div>
 
     <table class="table table-hover table-bordered">
