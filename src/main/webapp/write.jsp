@@ -5,7 +5,7 @@
 <div class="container">
     <h3 class="text-center mb-4">✏️ 새 글 작성</h3>
 
-    <form action="write_ok.jsp" method="post">
+    <form action="write_ok.jsp" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">제목</label>
             <input type="text" class="form-control" id="title" name="title" required>
@@ -14,6 +14,11 @@
         <div class="form-group">
             <label for="writer">작성자</label>
             <input type="text" class="form-control" id="writer" name="writer" required>
+        </div>
+
+        <div class="form-group">
+            <label for="photo">사진 첨부</label>
+            <input type="file" class="form-control-file" id="photo" name="photo">
         </div>
 
         <div class="form-group">

@@ -1,4 +1,5 @@
 package org.example.com.crud.bean;
+
 import java.util.Date;
 
 public class BoardVO {
@@ -8,6 +9,7 @@ public class BoardVO {
     private String content;
     private Date regdate;
     private int cnt;
+    private String filename; // 파일 업로드용 필드
 
     public int getSeq() {
         return seq;
@@ -55,5 +57,13 @@ public class BoardVO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
