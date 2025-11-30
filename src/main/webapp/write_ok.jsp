@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="org.example.com.crud.dao.BoardDAO"%>
+<%@ page import="org.example.com.crud.bean.BoardVO"%>
+<%@ page import="org.example.com.crud.common.FileUpload"%>
 <%
     request.setCharacterEncoding("UTF-8");
-%>
 
-<jsp:useBean id="u" class="org.example.com.crud.bean.BoardVO" />
-<jsp:setProperty property="*" name="u" />
+    FileUpload upload = new FileUpload();
+    BoardVO u = upload.uploadPhoto(request);
 
-<%
     BoardDAO boardDAO = new BoardDAO();
     int result = boardDAO.insertBoard(u);
 
@@ -16,7 +16,5 @@
     } else {
         System.out.println("글 추가 성공!");
     }
-
-    // 4. 처리가 끝나면 목록 페이지로 이동
     response.sendRedirect("list.jsp");
 %>
