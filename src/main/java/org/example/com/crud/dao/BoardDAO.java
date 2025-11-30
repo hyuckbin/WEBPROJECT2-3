@@ -143,4 +143,20 @@ public class BoardDAO {
         return board;
     }
 
+    // 조회수 증가 (상세보기 시 호출)
+    public void increaseCnt(int seq) {
+        System.out.println("===> JDBC로 increaseCnt() 기능 처리");
+        try {
+            conn = JDBCUtil.getConnection();
+            // 해당 글 번호(seq)의 조회수(cnt)를 기존 값에서 +1 더해서 수정
+            String sql = "UPDATE BOARD SET cnt = cnt + 1 WHERE seq = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.close(stmt, conn);
+        }
+    }
 }
