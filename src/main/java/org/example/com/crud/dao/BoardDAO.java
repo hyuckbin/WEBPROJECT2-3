@@ -88,14 +88,24 @@ public class BoardDAO {
         System.out.println("===> JDBC로 updateBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-
-            String sql = "update BOARD set title=? , writer=? , content=? , filename= ? where seq=?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, vo.getTitle());
-            stmt.setString(2, vo.getWriter());
-            stmt.setString(3, vo.getContent());
-            stmt.setString(4, vo.getFilename());
-            stmt.setInt(5, vo.getSeq());
+            String sql = "";
+            // 1. 새 파일이 업로드되었는지 확인
+            if (vo.getFilename() != null && !vo.getFilename().equals("")) {
+                sql = "update BOARD set title=?, writer=?, content=?, filename=? where seq=?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, vo.getTitle());
+                stmt.setString(2, vo.getWriter());
+                stmt.setString(3, vo.getContent());
+                stmt.setString(4, vo.getFilename());
+                stmt.setInt(5, vo.getSeq());
+            } else {
+                sql = "update BOARD set title=?, writer=?, content=? where seq=?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, vo.getTitle());
+                stmt.setString(2, vo.getWriter());
+                stmt.setString(3, vo.getContent());
+                stmt.setInt(4, vo.getSeq());
+            }
 
             return stmt.executeUpdate();
         } catch (Exception e) {
