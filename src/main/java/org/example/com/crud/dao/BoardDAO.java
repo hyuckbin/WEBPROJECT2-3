@@ -123,6 +123,7 @@ public class BoardDAO {
                 board.setContent(rs.getString("content"));
                 board.setRegdate(rs.getDate("regdate"));
                 board.setCnt(rs.getInt("cnt"));
+                board.setFilename(rs.getString("filename"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,4 +132,5 @@ public class BoardDAO {
         }
         return board;
     }
+
 }
