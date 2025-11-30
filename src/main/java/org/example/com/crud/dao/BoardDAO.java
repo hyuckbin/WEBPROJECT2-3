@@ -26,16 +26,17 @@ public class BoardDAO {
         System.out.println("===> JDBC로 insertBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_INSERT);
+            String sql = "insert into BOARD (title, writer, content, filename) values (?,?,?,?)";
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, vo.getTitle());
             stmt.setString(2, vo.getWriter());
             stmt.setString(3, vo.getContent());
+            stmt.setString(4, vo.getFilename());
             return stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // 자원 해제 코드가 들어가야 함 (JDBCUtil.close(stmt, conn) 등)
-            JDBCUtil.close(conn);
+            JDBCUtil.close(stmt,conn);
         }
         return 0;
     }
@@ -56,6 +57,7 @@ public class BoardDAO {
                 board.setContent(rs.getString("content"));
                 board.setRegdate(rs.getDate("regdate"));
                 board.setCnt(rs.getInt("cnt"));
+                board.setFilename(rs.getString("filename"));
                 boardList.add(board);
             }
         } catch (Exception e) {
@@ -86,11 +88,15 @@ public class BoardDAO {
         System.out.println("===> JDBC로 updateBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_UPDATE);
+
+            String sql = "update BOARD set title=? , writer=? , content=? , filename= ? where seq=?";
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, vo.getTitle());
             stmt.setString(2, vo.getWriter());
             stmt.setString(3, vo.getContent());
-            stmt.setInt(4, vo.getSeq());
+            stmt.setString(4, vo.getFilename());
+            stmt.setInt(5, vo.getSeq());
+
             return stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
