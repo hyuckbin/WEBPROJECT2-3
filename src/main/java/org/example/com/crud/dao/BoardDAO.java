@@ -42,13 +42,26 @@ public class BoardDAO {
     }
 
     // 2. 글 목록 조회 (Read List)
-    public List<BoardVO> getBoardList() {
+    public List<BoardVO> getBoardList(String key, String word, String order) {
         System.out.println("===> JDBC로 getBoardList() 기능 처리");
         List<BoardVO> boardList = new ArrayList<BoardVO>();
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_LIST);
+            String sql = "select * from BOARD ";
+
+        if(word!= null && !word.equals("")){
+            sql += "where "+key+" like '%"+word+"%'";
+        }
+        // 2. 정렬 처리 (ORDER BY)
+        // order 값이 "cnt"면 조회수순, 아니면(기본) 최신순(seq)
+        if ("cnt".equals(order)) {
+            sql += " order by cnt desc"; // 조회수 높은 순
+        } else {
+            sql += " order by seq desc"; // 최신글 우선 (기본값)
+        }
+            stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
+
             while (rs.next()) {
                 BoardVO board = new BoardVO();
                 board.setSeq(rs.getInt("seq"));
@@ -63,7 +76,7 @@ public class BoardDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            JDBCUtil.close(conn);
+            JDBCUtil.close(rs,stmt,conn);
         }
         return boardList;
     }
